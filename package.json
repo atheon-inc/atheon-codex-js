@@ -1,0 +1,35 @@
+{
+  "name": "@atheon-inc/codex",
+  "version": "0.0.0",
+  "description": "Javascript SDK for Atheon Advertisement Services",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.cjs",
+      "require": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist/",
+    "README.md",
+    "License.md"
+  ],
+  "scripts": {
+    "build": "node build.mjs",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.9",
+    "typescript": "^5.9.2"
+  },
+  "keywords": [
+    "atheon",
+    "api",
+    "sdk"
+  ],
+  "author": "Saurabh Ghanekar",
+  "license": "Apache-2.0"
+}

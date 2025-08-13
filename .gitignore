@@ -1,0 +1,39 @@
+# Node dependencies
+node_modules/
+
+# Build output
+dist/
+lib/
+esm/
+cjs/
+
+# TypeScript
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Environment
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.env
+
+# Coverage output
+coverage/
+
+# esbuild metafiles (if you generate them)
+*.meta.json
+
+# Custom ignore files/folders
+.DS_Store
+.vscode
+*credentials*.json
+scratch*
