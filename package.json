@@ -1,15 +1,14 @@
 {
   "name": "@atheon-inc/codex",
-  "version": "0.0.0",
+  "version": "0.1.1",
   "description": "Javascript SDK for Atheon Advertisement Services",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.cjs",
-      "require": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.mjs"
     }
   },
   "files": [
@@ -30,6 +29,6 @@
     "api",
     "sdk"
   ],
-  "author": "Saurabh Ghanekar",
+  "author": "Saurabh Ghanekar <ghanekarsaurabh8@gmail.com>",
   "license": "Apache-2.0"
 }
