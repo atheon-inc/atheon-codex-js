@@ -2,6 +2,9 @@
   "name": "@atheon-inc/codex",
   "version": "0.1.1",
   "description": "Javascript SDK for Atheon Advertisement Services",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
