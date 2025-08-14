@@ -58,4 +58,4 @@ jobs:
         run: npm install -g npm@latest
 
       - name: Publish to Npm via OIDC
-        run: npm publish
+        run: npm publish dist/ --access public
