@@ -1,42 +1,42 @@
 {
-  "name": "@atheon-inc/codex",
-  "version": "0.1.5",
-  "description": "Javascript SDK for Atheon Advertisement Services",
-  "publishConfig": {
-    "access": "public"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/atheon-inc/atheon-codex-js"
-  },
-  "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    }
-  },
-  "files": [
-    "dist/",
-    "README.md",
-    "License.md"
-  ],
-  "scripts": {
-    "build": "node build.mjs",
-    "prepublishOnly": "npm run build"
-  },
-  "devDependencies": {
-    "esbuild": "^0.25.9",
-    "typescript": "^5.9.2"
-  },
-  "keywords": [
-    "atheon",
-    "api",
-    "sdk"
-  ],
-  "author": "Saurabh Ghanekar <ghanekarsaurabh8@gmail.com>",
-  "license": "Apache-2.0"
+    "name": "@atheon-inc/codex",
+    "version": "0.2.0",
+    "description": "Javascript SDK for Atheon Advertisement Services",
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/atheon-inc/atheon-codex-js"
+    },
+    "type": "module",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.mjs",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.cjs"
+        }
+    },
+    "files": [
+        "dist/",
+        "README.md",
+        "License.md"
+    ],
+    "scripts": {
+        "build": "node build.mjs",
+        "prepublishOnly": "npm run build"
+    },
+    "devDependencies": {
+        "esbuild": "^0.25.9",
+        "typescript": "^5.9.2"
+    },
+    "keywords": [
+        "atheon",
+        "api",
+        "sdk"
+    ],
+    "author": "Saurabh Ghanekar <ghanekarsaurabh8@gmail.com>",
+    "license": "Apache-2.0"
 }

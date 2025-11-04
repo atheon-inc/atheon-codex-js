@@ -1,6 +1,10 @@
 import { APIException } from "./exceptions";
 import { _handleResponse } from "./_internal";
-import type { AdUnitsFetchModel, AdUnitsIntegrateModel } from "./models";
+import type {
+    AdUnitsFetchModel,
+    AdUnitsIntegrateModel,
+    TrackUnitIntegrateModel,
+} from "./models";
 
 export interface AtheonCodexClientOptions {
     apiKey: string;
@@ -54,6 +58,19 @@ export class AtheonCodexClient {
 
         const response = await fetch(url, options);
         return await _handleResponse(response, isStreamingRequest);
+    }
+
+    public async integrateTrackUnit(
+        payload: TrackUnitIntegrateModel
+    ): Promise<any> {
+        const response = await this._makeRequest(
+            "POST",
+            "/track-units/integrate",
+            payload,
+            false
+        );
+
+        return response;
     }
 
     public async fetchAdUnits(payload: AdUnitsFetchModel): Promise<any> {

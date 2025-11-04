@@ -13,6 +13,36 @@ yarn add @atheon-inc/codex
 
 ## Usage
 
+1. Analytics Tool:
+
+```javascript
+import { AtheonCodexClient } from "@atheon-inc/codex";
+
+async function main() {
+    // Initialize client
+    const client = new AtheonCodexClient({
+        apiKey: process.env.ATHEON_CODEX_API_KEY,
+    });
+
+    // Integrate track unit
+    let integratedContent = "";
+    try {
+        const integrationResponse = await client.integrateTrackUnit({
+            baseContent:
+                "insert the llm response generated from your application as the base content",
+        });
+        integratedContent =
+            integrationResponse?.response_data?.integrated_content ?? null;
+    } catch (err) {
+        console.error("Error integrating track unit:", err);
+    }
+
+    console.log("Integrated Content:", integratedContent);
+
+```
+
+1. Monetization via Adverts:
+
 ```javascript
 import { AtheonCodexClient } from "@atheon-inc/codex";
 

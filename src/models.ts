@@ -19,3 +19,10 @@ export interface AdUnitsIntegrateModel {
      */
     base_content: string;
 }
+
+export interface TrackUnitIntegrateModel {
+    /**
+     * The base content for integration. Must be at least 10 characters long.
+     */
+    base_content: string;
+}
