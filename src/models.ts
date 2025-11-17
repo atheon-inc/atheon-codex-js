@@ -1,28 +1,18 @@
-export interface AdUnitsFetchModel {
+export interface AtheonUnitFetchAndIntegrateModel {
     /**
      * The search query string. Must be at least 2 characters long.
      */
     query: string;
     /**
-     * Should 'fingerprint' based filtering be used or not.
-     */
-    use_fingerprint_filtering: boolean;
-}
-
-export interface AdUnitsIntegrateModel {
-    /**
-     * A list of ad unit IDs to integrate.
-     */
-    ad_unit_ids: string[];
-    /**
      * The base content for integration. Must be at least 10 characters long.
      */
     base_content: string;
-}
-
-export interface TrackUnitIntegrateModel {
     /**
-     * The base content for integration. Must be at least 10 characters long.
+     * Should include 'ad_units' or not.
      */
-    base_content: string;
+    include_ad_units: boolean;
+    /**
+     * Should 'user_intent' be used as filter or not.
+     */
+    use_user_intent_as_filter: boolean;
 }

@@ -13,8 +13,6 @@ yarn add @atheon-inc/codex
 
 ## Usage
 
-1. Analytics Tool:
-
 ```javascript
 import { AtheonCodexClient } from "@atheon-inc/codex";
 
@@ -24,67 +22,27 @@ async function main() {
         apiKey: process.env.ATHEON_CODEX_API_KEY,
     });
 
-    // Integrate track unit
-    let integratedContent = "";
+    // Fetch and Integrate atheon unit
+    let content = "";
     try {
-        const integrationResponse = await client.integrateTrackUnit({
-            baseContent:
-                "insert the llm response generated from your application as the base content",
-        });
-        integratedContent =
-            integrationResponse?.response_data?.integrated_content ?? null;
-    } catch (err) {
-        console.error("Error integrating track unit:", err);
-    }
-
-    console.log("Integrated Content:", integratedContent);
-
-```
-
-1. Monetization via Adverts:
-
-```javascript
-import { AtheonCodexClient } from "@atheon-inc/codex";
-
-async function main() {
-    // Initialize client
-    const client = new AtheonCodexClient({
-        apiKey: process.env.ATHEON_CODEX_API_KEY,
-    });
-
-    // Fetch ad units
-    let adUnitIds = [];
-    try {
-        const fetchResponse = await client.fetchAdUnits({
+        const fetchAndIntegrationResponse = await client.fetchAndIntegrateAtheonUnit({
             query: "Your user prompt/ad query goes here.",
+            baseContent: "insert the llm response generated from your application as the base content",
+            // use_user_intent_as_filter: true
         });
-        adUnitIds = (fetchResponse?.response_data ?? []).map(
-            (adUnit) => adUnit?.id
-        );
+        content =
+            fetchAndIntegrationResponse?.response_data?.integrated_content ?? null;
     } catch (err) {
-        console.error("Error fetching ad units:", err);
-        return;
+        console.error("Error fetching and integrating atheon unit:", err);
     }
 
-    // Integrate ad units
-    let integratedContent = "";
-    try {
-        const integrationResponse = await client.integrateAdUnits({
-            ad_unit_ids: adUnitIds,
-            baseContent:
-                "insert the llm response generated from your application as the base content",
-        });
-        integratedContent =
-            integrationResponse?.response_data?.integrated_content ?? null;
-    } catch (err) {
-        console.error("Error integrating ad units:", err);
-    }
-
-    console.log("Integrated Content:", integratedContent);
-}
+    console.log("Content with Atheon Unit:", content);
 
 main();
 ```
+
+>> **Note:** _You can enable monetization through [Atheon Gateway Dashboard](https://gateway.atheon.ad) under project settings._
+
 
 While you can provide an `apiKey` keyword argument, we recommend using [dotenv](https://github.com/motdotla/dotenv) (or something similar) to add `ATHEON_CODEX_API_KEY="My Eon API Key"` to your `.env` file so that your API Key is not stored in source control.
 

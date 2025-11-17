@@ -1,10 +1,6 @@
 import { APIException } from "./exceptions";
 import { _handleResponse } from "./_internal";
-import type {
-    AdUnitsFetchModel,
-    AdUnitsIntegrateModel,
-    TrackUnitIntegrateModel,
-} from "./models";
+import type { AtheonUnitFetchAndIntegrateModel } from "./models";
 
 export interface AtheonCodexClientOptions {
     apiKey: string;
@@ -33,7 +29,7 @@ export class AtheonCodexClient {
         endpoint: string,
         jsonPayload?: Record<string, any>,
         isStreamingRequest: boolean = false,
-        timeout: number = 15000
+        timeout: number = 45000
     ): Promise<any> {
         const url = `${this.baseUrl}${endpoint}`;
         const headers: Record<string, string> = { ...this.headers };
@@ -60,66 +56,16 @@ export class AtheonCodexClient {
         return await _handleResponse(response, isStreamingRequest);
     }
 
-    public async integrateTrackUnit(
-        payload: TrackUnitIntegrateModel
+    public async fetchAndIntegrateAtheonUnit(
+        payload: AtheonUnitFetchAndIntegrateModel
     ): Promise<any> {
         const response = await this._makeRequest(
             "POST",
-            "/track-units/integrate",
+            "/track-units/fetch-and-integrate",
             payload,
             false
         );
 
         return response;
-    }
-
-    public async fetchAdUnits(payload: AdUnitsFetchModel): Promise<any> {
-        const response = await this._makeRequest(
-            "POST",
-            "/ad-units/fetch",
-            payload,
-            false
-        );
-
-        const taskId = response.message?.task_id;
-        if (!taskId) {
-            throw new APIException(
-                500,
-                "Could not retrieve task_id from initial response."
-            );
-        }
-
-        return this._makeRequest(
-            "GET",
-            `/ad-units/fetch/response/${taskId}`,
-            undefined,
-            true
-        );
-    }
-
-    public async integrateAdUnits(
-        payload: AdUnitsIntegrateModel
-    ): Promise<any> {
-        const response = await this._makeRequest(
-            "POST",
-            "/ad-units/integrate",
-            payload,
-            false
-        );
-
-        const taskId = response.message?.task_id;
-        if (!taskId) {
-            throw new APIException(
-                500,
-                "Could not retrieve task_id from initial response."
-            );
-        }
-
-        return this._makeRequest(
-            "GET",
-            `/ad-units/integrate/response/${taskId}`,
-            undefined,
-            true
-        );
     }
 }
