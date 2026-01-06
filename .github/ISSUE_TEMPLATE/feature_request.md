@@ -1,6 +1,6 @@
 ---
 name: 💡 Feature Request
-about: Suggest an idea for Pytempl
+about: Suggest an idea for Atheon Codex JS SDK
 labels: feature-request
 assignees: ""
 ---
