@@ -6,6 +6,16 @@ export interface AtheonCodexClientOptions {
     apiKey: string;
     baseUrl?: string;
     headers?: Record<string, string>;
+
+    /**
+     * Supported special keys:
+     * - `params`: Record<string, any> - Merged with URL query parameters.
+     * - `cookies`: Record<string, string> - Added to the 'Cookie' header.
+     * - `headers`: Record<string, string> - Merged with request headers.
+     * - `timeout`: number - Request timeout in milliseconds (overrides default).
+     *
+     * All other keys (e.g., `mode`, `credentials`) are passed directly to `fetch`.
+     */
     kwargs?: Record<string, any>;
 }
 
@@ -29,12 +39,48 @@ export class AtheonCodexClient {
         endpoint: string,
         jsonPayload?: Record<string, any>,
         isStreamingRequest: boolean = false,
-        timeout: number = 45000
+        defaultTimeout: number = 45000
     ): Promise<any> {
-        const url = `${this.baseUrl}${endpoint}`;
+        const {
+            params: kwargsParams,
+            cookies: kwargsCookies,
+            headers: kwargsHeaders,
+            timeout: kwargsTimeout,
+            ...fetchOptions
+        } = this.kwargs;
+
+        const urlObj = new URL(`${this.baseUrl}${endpoint}`);
+        if (kwargsParams) {
+            Object.entries(kwargsParams).forEach(([key, value]) => {
+                if (value !== undefined && value !== null) {
+                    urlObj.searchParams.append(key, String(value));
+                }
+            });
+        }
+        const url = urlObj.toString();
+
         const headers: Record<string, string> = { ...this.headers };
+        if (kwargsHeaders) {
+            Object.assign(headers, kwargsHeaders);
+        }
+
+        if (kwargsCookies) {
+            const cookieString = Object.entries(kwargsCookies)
+                .map(([k, v]) => `${k}=${v}`)
+                .join("; ");
+
+            if (headers["Cookie"]) {
+                headers["Cookie"] += `; ${cookieString}`;
+            } else {
+                headers["Cookie"] = cookieString;
+            }
+        }
+
+        const timeout =
+            typeof kwargsTimeout === "number" ? kwargsTimeout : defaultTimeout;
+
         const options: RequestInit = {
-            ...this.kwargs,
+            ...fetchOptions, // Pass through standard fetch options (mode, cache, etc.)
             method,
             headers: headers,
             signal: AbortSignal.timeout(timeout),
