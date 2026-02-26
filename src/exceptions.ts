@@ -1,5 +1,8 @@
 export class APIException extends Error {
-    constructor(public status: number, public detail?: string) {
+    constructor(
+        public status: number,
+        public detail?: string,
+    ) {
         super(detail || `Request failed with status ${status}`);
         this.name = "APIException";
     }

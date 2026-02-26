@@ -11,7 +11,7 @@ import {
 
 function _handleCommon3xx4xx5xxStatusCode(
     statusCode: number,
-    responseText: string
+    responseText: string,
 ): never {
     switch (statusCode) {
         case 400:
@@ -24,27 +24,27 @@ function _handleCommon3xx4xx5xxStatusCode(
             throw new NotFoundException(`Not Found: ${responseText}`);
         case 422:
             throw new UnprocessableEntityException(
-                `Unprocessable Entity: ${responseText}`
+                `Unprocessable Entity: ${responseText}`,
             );
         case 429:
             throw new RateLimitException(
-                `Rate Limit Exceeded: ${responseText}`
+                `Rate Limit Exceeded: ${responseText}`,
             );
         case 500:
             throw new InternalServerErrorException(
-                `Internal Server Error: ${responseText}`
+                `Internal Server Error: ${responseText}`,
             );
         default:
             throw new APIException(
                 statusCode,
-                `Unexpected Error: ${responseText}`
+                `Unexpected Error: ${responseText}`,
             );
     }
 }
 
 export async function _handleResponse(
     response: Response,
-    isStreamingRequest: boolean = false
+    isStreamingRequest: boolean = false,
 ) {
     switch (response.status) {
         case 200:
@@ -63,11 +63,11 @@ export async function _handleResponse(
                         for (const line of lines) {
                             if (line.startsWith("data: ")) {
                                 return JSON.parse(
-                                    line.substring("data: ".length).trim()
+                                    line.substring("data: ".length).trim(),
                                 );
                             } else if (line.startsWith("error: ")) {
                                 throw new InternalServerErrorException(
-                                    line.substring("error: ".length).trim()
+                                    line.substring("error: ".length).trim(),
                                 );
                             }
                         }
@@ -75,12 +75,12 @@ export async function _handleResponse(
 
                     throw new APIException(
                         500,
-                        "Stream ended without a valid event."
+                        "Stream ended without a valid event.",
                     );
                 } else {
                     throw new APIException(
                         500,
-                        "Streaming response body is null."
+                        "Streaming response body is null.",
                     );
                 }
             } else {

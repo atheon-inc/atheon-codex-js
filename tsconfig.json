@@ -7,14 +7,8 @@
         "declaration": true,
         "module": "esnext",
         "target": "es2020",
-        "outDir": "./dist",
+        "outDir": "./dist"
     },
-    "include": [
-        "src"
-    ],
-    "exclude": [
-        "node_modules",
-        "dist",
-        "tests"
-    ]
+    "include": ["src"],
+    "exclude": ["node_modules", "dist", "tests"]
 }

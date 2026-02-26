@@ -1,7 +1,7 @@
 {
     "name": "@atheon-inc/codex",
-    "version": "0.3.1",
-    "description": "Javascript SDK for Atheon Advertisement Services",
+    "version": "0.4.0",
+    "description": "Javascript SDK for Atheon Analytics Services",
     "publishConfig": {
         "access": "public"
     },
@@ -37,6 +37,6 @@
         "api",
         "sdk"
     ],
-    "author": "Saurabh Ghanekar <ghanekarsaurabh8@gmail.com>",
+    "author": "Saurabh Ghanekar <saurabh@atheon.ad>",
     "license": "Apache-2.0"
 }

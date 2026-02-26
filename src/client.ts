@@ -1,6 +1,6 @@
 import { APIException } from "./exceptions";
 import { _handleResponse } from "./_internal";
-import type { AtheonUnitFetchAndIntegrateModel } from "./models";
+import type { AtheonUnitCreateModel } from "./models";
 
 export interface AtheonCodexClientOptions {
     apiKey: string;
@@ -39,7 +39,7 @@ export class AtheonCodexClient {
         endpoint: string,
         jsonPayload?: Record<string, any>,
         isStreamingRequest: boolean = false,
-        defaultTimeout: number = 45000
+        defaultTimeout: number = 45000,
     ): Promise<any> {
         const {
             params: kwargsParams,
@@ -90,7 +90,7 @@ export class AtheonCodexClient {
             if (method !== "GET") {
                 throw new APIException(
                     400,
-                    "Streaming requests only support the GET method."
+                    "Streaming requests only support the GET method.",
                 );
             }
             headers["Accept"] = "text/event-stream";
@@ -102,14 +102,14 @@ export class AtheonCodexClient {
         return await _handleResponse(response, isStreamingRequest);
     }
 
-    public async fetchAndIntegrateAtheonUnit(
-        payload: AtheonUnitFetchAndIntegrateModel
+    public async createAtheonUnit(
+        payload: AtheonUnitCreateModel,
     ): Promise<any> {
         const response = await this._makeRequest(
             "POST",
-            "/track-units/fetch-and-integrate",
+            "/track-units/create",
             payload,
-            false
+            false,
         );
 
         return response;
