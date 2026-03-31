@@ -17,7 +17,7 @@
  * ```
  */
 
-export const __version__ = "1.0.0";
+export const __version__ = "1.0.1";
 
 export type { AtheonCodexClientOptions } from "./client";
 export { AtheonCodexClient } from "./client";

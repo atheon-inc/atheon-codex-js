@@ -77,6 +77,29 @@ abstract class BaseInteraction {
   setProperty(key: string, value: unknown): void {
     this.properties[key] = value;
   }
+
+  /**
+   * Creates a child interaction, giving you manual control over
+   * its lifecycle.
+   *
+   * Must be called inside an active {@link contextWith} scope.
+   */
+  spawnChildInteraction(opts: {
+    agentName: string;
+    parent: Interaction | ChildInteraction;
+    provider: string;
+    modelName: string;
+    properties?: Record<string, unknown>;
+  }): [ChildInteraction, InteractionContext] {
+    const child = new ChildInteraction({
+      agentName: opts.agentName,
+      parent: opts.parent,
+      provider: opts.provider,
+      modelName: opts.modelName,
+      properties: opts.properties,
+    });
+    return [child, child as unknown as InteractionContext];
+  }
 }
 
 /**
@@ -200,7 +223,7 @@ export class ChildInteraction extends BaseInteraction {
     if (opts.finishReason !== undefined) this.finishReason = opts.finishReason;
   }
 
-  finishAgent(error?: string): void {
+  finish(error?: string): void {
     if (this.finished) return;
 
     this.finished = true;

@@ -103,7 +103,7 @@ export function agent<TArgs extends unknown[], TReturn>(
         errorMsg = e instanceof Error ? e.message : String(e);
         throw e;
       } finally {
-        child.finishAgent(errorMsg);
+        child.finish(errorMsg);
       }
     });
   };
