@@ -69,7 +69,8 @@ export class AtheonCodexClient {
     opts: AtheonCodexClientOptions,
   ): Promise<AtheonCodexClient> {
     const client = new AtheonCodexClient(opts);
-    await client.initializeSigning();
+    const ok = await client.initializeSigning();
+    if (!ok) throw new Error("Failed to complete cryptographic handshake.");
     return client;
   }
 
@@ -85,18 +86,24 @@ export class AtheonCodexClient {
     await this.shutdown();
   }
 
-  private async initializeSigning(): Promise<void> {
+  private async initializeSigning(): Promise<boolean> {
+    function isRetryableError(err: unknown): boolean {
+      return (
+        err instanceof RateLimitException ||
+        err instanceof InternalServerErrorException ||
+        (err instanceof TypeError && err.message === "fetch failed")
+      );
+    }
+
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
-        const response = await this.fetch("/track-ai-events/signing-secret", {
+        const response = await this.request("/track-ai-events/signing-secret", {
           method: "GET",
         });
         const result = await handleResponse(response);
 
         if (isErr(result)) {
-          const isRetryable =
-            result.error instanceof RateLimitException ||
-            result.error instanceof InternalServerErrorException;
+          const isRetryable = isRetryableError(result.error);
 
           if (isRetryable && attempt < 2) {
             await new Promise((r) => setTimeout(r, 200 * 2 ** attempt));
@@ -107,17 +114,14 @@ export class AtheonCodexClient {
             "[atheon-codex] Security handshake failed:",
             result.error.message,
           );
-          return;
+          return false;
         }
 
         this.fernetKey = result.value["signing_secret"] as string;
         this.envContext = result.value["env_context"] as string;
-        return;
-      } catch (e) {
-        const isRetryable =
-          e instanceof RateLimitException ||
-          e instanceof InternalServerErrorException ||
-          (e instanceof TypeError && e.message === "fetch failed");
+        return true;
+      } catch (err) {
+        const isRetryable = isRetryableError(err);
 
         if (isRetryable && attempt < 2) {
           await new Promise((r) => setTimeout(r, 200 * 2 ** attempt));
@@ -126,11 +130,12 @@ export class AtheonCodexClient {
 
         console.error(
           "[atheon-codex] Security handshake failed after retry:",
-          e,
+          err,
         );
-        return;
+        return false;
       }
     }
+    return false;
   }
 
   /**
@@ -232,7 +237,7 @@ export class AtheonCodexClient {
     return fernetEncrypt(this.fernetKey, payload);
   }
 
-  private async fetch(path: string, init: RequestInit): Promise<Response> {
+  private async request(path: string, init: RequestInit): Promise<Response> {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), this.requestTimeoutMs);
 
@@ -253,7 +258,7 @@ export class AtheonCodexClient {
   }
 
   private async sendBatch(batch: Record<string, unknown>[]): Promise<void> {
-    const response = await this.fetch("/track-ai-events/", {
+    const response = await this.request("/track-ai-events/", {
       method: "POST",
       body: JSON.stringify({ events: batch }),
     });

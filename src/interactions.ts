@@ -42,24 +42,29 @@ export function contextWith<T>(
 
 abstract class BaseInteraction {
   readonly interactionId: string;
-  readonly provider: string;
-  readonly modelName: string;
-  readonly properties: Record<string, unknown>;
+  readonly properties: Record<string, unknown>; // the reference is fixed, not the contents
   readonly toolsUsed: (ToolRecord | AgentRecord)[] = [];
+
+  provider: string | undefined;
+  modelName: string | undefined;
 
   protected finished = false;
   protected readonly startTime: number;
 
   constructor(
-    provider: string,
-    modelName: string,
+    provider?: string,
+    modelName?: string,
     properties?: Record<string, unknown>,
   ) {
     this.interactionId = randomUUID();
-    this.provider = provider;
-    this.modelName = modelName;
     this.properties = properties ? { ...properties } : {};
     this.startTime = performance.now();
+    if (provider) {
+      this.provider = provider;
+    }
+    if (modelName) {
+      this.modelName = modelName;
+    }
   }
 
   protected get elapsedMs(): number {
@@ -87,8 +92,8 @@ abstract class BaseInteraction {
   spawnChildInteraction(opts: {
     agentName: string;
     parent: Interaction | ChildInteraction;
-    provider: string;
-    modelName: string;
+    provider?: string;
+    modelName?: string;
     properties?: Record<string, unknown>;
   }): [ChildInteraction, InteractionContext] {
     const child = new ChildInteraction({
@@ -159,8 +164,8 @@ export class Interaction extends BaseInteraction {
 
     const payload = buildTrackPayload({
       interactionId: this.interactionId,
-      provider: this.provider,
-      modelName: this.modelName,
+      provider: this.provider as string,
+      modelName: this.modelName as string,
       input: this.input,
       output: opts.output,
       promptHash: generateHash(this.input),
@@ -200,8 +205,8 @@ export class ChildInteraction extends BaseInteraction {
   constructor(opts: {
     agentName: string;
     parent: Interaction | ChildInteraction;
-    provider: string;
-    modelName: string;
+    provider?: string;
+    modelName?: string;
     properties?: Record<string, unknown>;
   }) {
     super(opts.provider, opts.modelName, opts.properties);
@@ -223,8 +228,24 @@ export class ChildInteraction extends BaseInteraction {
     if (opts.finishReason !== undefined) this.finishReason = opts.finishReason;
   }
 
+  setProviderAndModelName(opts: { provider: string; modelName: string }): void {
+    this.provider = opts.provider as string;
+    this.modelName = opts.modelName as string;
+  }
+
   finish(error?: string): void {
     if (this.finished) return;
+
+    if (
+      this.provider === null ||
+      this.provider === undefined ||
+      this.modelName === null ||
+      this.modelName === undefined
+    ) {
+      throw new Error(
+        `Expected 'provider' and 'modelName' fields to be not 'null | undefined'. Please use 'setProviderAndModelName(...)' method to populate those fields.`,
+      );
+    }
 
     this.finished = true;
     const latencyMs = this.elapsedMs;
