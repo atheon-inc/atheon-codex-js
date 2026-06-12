@@ -116,7 +116,7 @@ export class Interaction extends BaseInteraction {
   readonly conversationId?: string;
 
   private readonly queue: EventQueue;
-  private readonly signFn: (id: string) => string | undefined;
+  private readonly signFn: (id: string) => Promise<string | undefined>;
 
   constructor(opts: {
     provider: string;
@@ -125,7 +125,7 @@ export class Interaction extends BaseInteraction {
     conversationId?: string;
     properties?: Record<string, unknown>;
     queue: EventQueue;
-    signFn: (id: string) => string | undefined;
+    signFn: (id: string) => Promise<string | undefined>;
   }) {
     super(opts.provider, opts.modelName, opts.properties);
     this.input = opts.input;
@@ -184,7 +184,7 @@ export class Interaction extends BaseInteraction {
     return [
       payload.interaction_id,
       payload.prompt_hash ?? "",
-      this.signFn(payload.interaction_id),
+      await this.signFn(payload.interaction_id),
     ];
   }
 }

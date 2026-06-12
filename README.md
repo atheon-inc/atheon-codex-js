@@ -23,7 +23,7 @@ async function main() {
   await atheon.init({ apiKey: process.env.ATHEON_API_KEY! });
 
   // Track a completed interaction — non-blocking, enqueues in the background
-  const [interactionId, promptHash, fingerprint] = atheon.track({
+  const [interactionId, promptHash, fingerprint] = await atheon.track({
     provider: "openai",
     modelName: "gpt-4o",
     input: "How can I write blogs for my website?",

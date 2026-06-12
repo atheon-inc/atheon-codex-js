@@ -187,7 +187,7 @@ export class AtheonCodexClient {
     return [
       payload.interaction_id,
       payload.prompt_hash ?? "",
-      this.signInteractionId(payload.interaction_id),
+      await this.signInteractionId(payload.interaction_id),
     ];
   }
 
@@ -226,7 +226,9 @@ export class AtheonCodexClient {
     return [interaction, interaction as unknown as InteractionContext];
   }
 
-  private signInteractionId(interactionId: string): string | undefined {
+  private async signInteractionId(
+    interactionId: string,
+  ): Promise<string | undefined> {
     if (!this.fernetKey) return undefined;
 
     const payload = JSON.stringify({
@@ -234,7 +236,7 @@ export class AtheonCodexClient {
       env_context: this.envContext,
     });
 
-    return fernetEncrypt(this.fernetKey, payload);
+    return await fernetEncrypt(this.fernetKey, payload);
   }
 
   private async request(path: string, init: RequestInit): Promise<Response> {
