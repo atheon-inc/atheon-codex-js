@@ -47,10 +47,8 @@ async function build() {
 
     // Generate TypeScript declaration files (.d.ts)
     execSync(
-      'npx tsc --emitDeclarationOnly --project tsconfig.json --outDir dist, { stdio: "inherit" }',
-      {
-        stdio: "inherit",
-      },
+      "npx tsc --emitDeclarationOnly --project tsconfig.json --outDir dist",
+      { stdio: "inherit" },
     );
     console.log("✔ Type declarations generated (dist/index.d.ts).");
 
