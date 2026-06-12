@@ -82,7 +82,7 @@ const finalText = await atheon.contextWith(ctx, async () => {
 
 interaction.setProperty("user_tier", "pro"); // enrich mid-flight
 
-const [interactionId, promptHash, signedToken] = interaction.finish({
+const [interactionId, promptHash, signedToken] = await interaction.finish({
   output: finalText,
   tokensInput: 80,
   tokensOutput: 220,

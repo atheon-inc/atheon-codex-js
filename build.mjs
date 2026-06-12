@@ -8,7 +8,14 @@ try {
   console.log("✔ Cleaned dist/ directory.");
 } catch (e) {}
 
-// Shared config for both builds
+try {
+  execSync("tsc --noEmit --project tsconfig.json", { stdio: "inherit" });
+  console.log("✔ TypeScript type-check passed.");
+} catch (e) {
+  console.error("\n❌ TypeScript type-check failed. Aborting build.");
+  process.exit(1);
+}
+
 const config = {
   entryPoints: ["src/index.ts"],
   bundle: true,
@@ -26,6 +33,7 @@ async function build() {
       ...config,
       format: "esm",
       outfile: "dist/index.mjs",
+      mainFields: ["module", "main"],
     });
     console.log("✔ ESM build complete (dist/index.mjs).");
 
@@ -39,7 +47,7 @@ async function build() {
 
     // Generate TypeScript declaration files (.d.ts)
     execSync(
-      "npx tsc --emitDeclarationOnly --project tsconfig.json --outDir dist",
+      'npx tsc --emitDeclarationOnly --project tsconfig.json --outDir dist, { stdio: "inherit" }',
       {
         stdio: "inherit",
       },

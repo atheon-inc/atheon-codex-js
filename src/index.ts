@@ -13,11 +13,11 @@
  * });
  *
  * interaction.setProperty("ragResponse", response);
- * interaction.finish();
+ * await interaction.finish();
  * ```
  */
 
-export const __version__ = "1.0.2";
+export const __version__ = "1.1.0";
 
 export type { AtheonCodexClientOptions } from "./client";
 export { AtheonCodexClient } from "./client";

@@ -148,7 +148,7 @@ export class AtheonCodexClient {
    *   `signedToken` is `undefined` if the signing handshake has not completed.
    * @throws If neither `input` nor `output` is provided.
    */
-  track(opts: {
+  async track(opts: {
     provider: string;
     modelName: string;
     input?: string;
@@ -160,7 +160,7 @@ export class AtheonCodexClient {
     toolsUsed?: (ToolRecord | AgentRecord)[];
     conversationId?: string;
     properties?: Record<string, unknown>;
-  }): [string, string, string | undefined] {
+  }): Promise<[string, string, string | undefined]> {
     if (!opts.input && !opts.output) {
       throw new Error(
         '[atheon-codex] Either "input" or "output" must be provided to track().',
@@ -172,7 +172,7 @@ export class AtheonCodexClient {
       modelName: opts.modelName,
       input: opts.input,
       output: opts.output,
-      promptHash: generateHash(opts.input),
+      promptHash: await generateHash(opts.input),
       tokensInput: opts.tokensInput,
       tokensOutput: opts.tokensOutput,
       finishReason: opts.finishReason,
@@ -203,7 +203,7 @@ export class AtheonCodexClient {
    * const [interaction, ctx] = client.begin({ provider: "openai", modelName: "gpt-4o", input });
    * const output = await atheon.contextWith(ctx, () => myRagPipeline(input));
    * interaction.setProperty("userId", req.user.id);
-   * const [id, hash, token] = interaction.finish({ output });
+   * const [id, hash, token] = await interaction.finish({ output });
    * ```
    */
   begin(opts: {

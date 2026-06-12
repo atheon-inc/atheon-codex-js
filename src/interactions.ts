@@ -1,5 +1,3 @@
-import { AsyncLocalStorage } from "node:async_hooks";
-import { randomUUID } from "node:crypto";
 import {
   type AgentRecord,
   type ToolRecord,
@@ -7,11 +5,13 @@ import {
   buildTrackPayload,
 } from "./models";
 import type { EventQueue } from "./queue";
-import { generateHash } from "./utils";
+import { generateHash, BrowserAsyncLocalStorage } from "./utils";
 
-export const interactionStorage = new AsyncLocalStorage<
-  Interaction | ChildInteraction | undefined
->();
+export const interactionStorage = globalThis.AsyncLocalStorage
+  ? new globalThis.AsyncLocalStorage<
+      Interaction | ChildInteraction | undefined
+    >()
+  : new BrowserAsyncLocalStorage<Interaction | ChildInteraction | undefined>();
 
 /** Returns the nearest active `Interaction` or `ChildInteraction`, or `undefined`. */
 export function getActiveInteraction():
@@ -56,7 +56,7 @@ abstract class BaseInteraction {
     modelName?: string,
     properties?: Record<string, unknown>,
   ) {
-    this.interactionId = randomUUID();
+    this.interactionId = globalThis.crypto.randomUUID();
     this.properties = properties ? { ...properties } : {};
     this.startTime = performance.now();
     if (provider) {
@@ -144,19 +144,20 @@ export class Interaction extends BaseInteraction {
    *
    * @returns A tuple of `[interactionId, promptHash, signedToken]`.
    */
-  finish(
+  async finish(
     opts: {
       output?: string;
       tokensInput?: number;
       tokensOutput?: number;
       finishReason?: string;
     } = {},
-  ): [string, string, string | undefined] {
+  ): Promise<[string, string, string | undefined]> {
+    const promptHash = await generateHash(this.input);
     if (this.finished) {
       console.warn(
         `[atheon-codex] finish() called more than once on interaction ${this.interactionId}.`,
       );
-      return [this.interactionId, generateHash(this.input), undefined];
+      return [this.interactionId, promptHash, undefined];
     }
 
     this.finished = true;
@@ -168,7 +169,7 @@ export class Interaction extends BaseInteraction {
       modelName: this.modelName as string,
       input: this.input,
       output: opts.output,
-      promptHash: generateHash(this.input),
+      promptHash: promptHash,
       tokensInput: opts.tokensInput,
       tokensOutput: opts.tokensOutput,
       finishReason: opts.finishReason,

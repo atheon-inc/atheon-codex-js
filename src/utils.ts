@@ -1,10 +1,20 @@
-import { createHash } from "node:crypto";
-
-export function generateHash(text?: string): string {
+export async function generateHash(text?: string): Promise<string> {
   const normalised = (text ?? "").trim().toLowerCase();
-  return createHash("sha256").update(normalised, "utf8").digest("hex");
+
+  const encoder = new TextEncoder();
+  const data = encoder.encode(normalised);
+
+  const hashBuffer = await globalThis.crypto.subtle.digest("SHA-256", data);
+
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+
+  return hashHex;
 }
 
+// ---
 export type Ok<T> = { readonly status: "ok"; readonly value: T };
 export type Err<E> = { readonly status: "err"; readonly error: E };
 export type Result<T, E> = Ok<T> | Err<E>;
@@ -23,4 +33,28 @@ export function isOk<T, E>(r: Result<T, E>): r is Ok<T> {
 
 export function isErr<T, E>(r: Result<T, E>): r is Err<E> {
   return r.status === "err";
+}
+
+// ---
+export interface IAsyncLocalStorage<T> {
+  run<R>(store: T, callback: () => R): R;
+  getStore(): T | undefined;
+}
+
+declare global {
+  var AsyncLocalStorage:
+    | {
+        new <T>(): IAsyncLocalStorage<T>;
+      }
+    | undefined;
+}
+
+export class BrowserAsyncLocalStorage<T> implements IAsyncLocalStorage<T> {
+  run<R>(store: T, callback: () => R): R {
+    return callback();
+  }
+
+  getStore(): T | undefined {
+    return undefined;
+  }
 }

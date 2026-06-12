@@ -1,10 +1,8 @@
-import { randomUUID } from "node:crypto";
-
 export interface ToolRecord {
   id: string;
   type: "tool";
   name: string;
-  latency_ms: string;
+  latency_ms?: string;
   error?: string;
 }
 
@@ -47,7 +45,7 @@ export function buildToolRecord(
   error?: string,
 ): ToolRecord {
   return {
-    id: randomUUID(),
+    id: globalThis.crypto.randomUUID(),
     type: "tool",
     name,
     latency_ms: latencyMs.toFixed(2),
@@ -68,7 +66,7 @@ export function buildAgentRecord(opts: {
   properties: Record<string, unknown>;
 }): AgentRecord {
   return {
-    id: randomUUID(),
+    id: globalThis.crypto.randomUUID(),
     type: "agent",
     name: opts.agentName,
     provider: opts.provider,
@@ -99,7 +97,7 @@ export function buildTrackPayload(opts: {
   properties: Record<string, unknown>;
 }): AtheonTrackPayload {
   return {
-    interaction_id: opts.interactionId ?? randomUUID(),
+    interaction_id: opts.interactionId ?? globalThis.crypto.randomUUID(),
     provider: opts.provider,
     model_name: opts.modelName,
     input: opts.input,
