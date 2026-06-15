@@ -45,7 +45,7 @@ async function main() {
 main();
 ```
 
-> **Note:** Get your API key from the [Atheon Gateway Dashboard](https://gateway.atheon.ad) under Project Settings. We recommend storing it in a `.env` file using [dotenv](https://github.com/motdotla/dotenv) rather than hardcoding it in source.
+> **Note:** Get your API key from the [Atheon Gateway Dashboard](https://gateway.atheon-inc.com) under Project Settings. We recommend storing it in a `.env` file using [dotenv](https://github.com/motdotla/dotenv) rather than hardcoding it in source.
 
 ## Usage
 
@@ -157,6 +157,6 @@ This SDK is licensed under the **Apache License 2.0**. See [LICENSE.md](LICENSE.
 
 ## Links
 
-  - [Atheon Documentation](https://docs.atheon.ad)
-  - [Gateway Dashboard](https://gateway.atheon.ad)
+  - [Atheon Documentation](https://docs.atheon-inc.com)
+  - [Gateway Dashboard](https://gateway.atheon-inc.com)
   - [npm](https://www.google.com/search?q=https://www.npmjs.com/package/%40atheon-inc/codex)
