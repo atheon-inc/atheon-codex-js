@@ -40,11 +40,14 @@ export class AtheonCodexClient {
   private envContext?: string;
 
   private constructor(opts: AtheonCodexClientOptions) {
+    if (!opts?.apiKey || opts.apiKey.trim() === "") {
+      throw new Error("[atheon-codex] apiKey is required and cannot be empty.");
+    }
+
     this.apiKey = opts.apiKey;
-    this.baseUrl = (opts.baseUrl ?? "https://api.atheon.ad/v1").replace(
-      /\/+$/,
-      "",
-    );
+    this.baseUrl = (
+      opts.baseUrl?.trim() || "https://api.atheon-inc.com/v1"
+    ).replace(/\/+$/, "");
     this.requestTimeoutMs = opts.requestTimeoutMs ?? 45_000;
     this.extraHeaders = opts.extraHeaders ?? {};
 
