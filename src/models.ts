@@ -84,7 +84,7 @@ export function buildAgentRecord(opts: {
 
 export function buildTrackPayload(opts: {
   interactionId?: string;
-  createdAt?: string;
+  createdAt?: Date;
   provider: string;
   modelName: string;
   input?: string;
@@ -100,7 +100,7 @@ export function buildTrackPayload(opts: {
 }): AtheonTrackPayload {
   return {
     interaction_id: opts.interactionId ?? globalThis.crypto.randomUUID(),
-    created_at: opts.createdAt ?? new Date().toISOString(),
+    created_at: opts.createdAt?.toISOString() || new Date().toISOString(),
     provider: opts.provider,
     model_name: opts.modelName,
     input: opts.input,

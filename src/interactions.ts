@@ -146,6 +146,7 @@ export class Interaction extends BaseInteraction {
    */
   async finish(
     opts: {
+      createdAt?: Date;
       output?: string;
       tokensInput?: number;
       tokensOutput?: number;
@@ -164,6 +165,7 @@ export class Interaction extends BaseInteraction {
     const latencyMs = this.elapsedMs;
 
     const payload = buildTrackPayload({
+      createdAt: opts.createdAt,
       interactionId: this.interactionId,
       provider: this.provider as string,
       modelName: this.modelName as string,

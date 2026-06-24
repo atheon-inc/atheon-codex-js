@@ -152,6 +152,7 @@ export class AtheonCodexClient {
    * @throws If neither `input` nor `output` is provided.
    */
   async track(opts: {
+    createdAt?: Date;
     provider: string;
     modelName: string;
     input?: string;
@@ -171,6 +172,7 @@ export class AtheonCodexClient {
     }
 
     const payload = buildTrackPayload({
+      createdAt: opts.createdAt,
       provider: opts.provider,
       modelName: opts.modelName,
       input: opts.input,
