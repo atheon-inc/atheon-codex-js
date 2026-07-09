@@ -76,6 +76,7 @@ export function buildAgentRecord(opts: {
     tokens_input: opts.tokensInput,
     tokens_output: opts.tokensOutput,
     finish_reason: opts.finishReason,
+    status_code: opts.statusCode,
     latency_ms: opts.latencyMs.toFixed(2),
     tools_used: opts.toolsUsed,
     error: opts.error,
