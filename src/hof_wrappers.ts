@@ -65,7 +65,7 @@ export function tool<TArgs extends unknown[], TReturn>(
  *   async (query: string) => {
  *     const docs = await vectorSearch(query);
  *     const response = await llm.messages.create({ ... });
- *     setResult({ tokensInput: 10, tokensOutput: 20, finishReason: "stop" });
+ *     setResult({ tokensInput: 10, tokensOutput: 20, finishReason: "stop", statusCode: 200 });
  *     return response.content[0].text;
  *   }
  * );
@@ -119,6 +119,7 @@ export function setResult(opts: {
   tokensInput?: number;
   tokensOutput?: number;
   finishReason?: string;
+  statusCode?: number;
 }): void {
   const active = getActiveInteraction();
 

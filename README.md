@@ -31,6 +31,7 @@ async function main() {
     tokensInput: 18,
     tokensOutput: 120,
     finishReason: "stop",
+    statusCode: 200,
   });
 
   // Pass track response to your frontend: <atheon-container interaction-id="..." prompt-hash="..." fingerprint="...">
@@ -87,6 +88,7 @@ const [interactionId, promptHash, signedToken] = await interaction.finish({
   tokensInput: 80,
   tokensOutput: 220,
   finishReason: "stop",
+  statusCode: 200,
 });
 ```
 
@@ -123,6 +125,7 @@ const ragAgent = atheon.agent(
       tokensInput: response.usage.input_tokens,
       tokensOutput: response.usage.output_tokens,
       finishReason: response.stop_reason,
+      statusCode: response.status,
     });
     
     return response.content.text;

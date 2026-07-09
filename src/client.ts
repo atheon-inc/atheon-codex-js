@@ -160,6 +160,7 @@ export class AtheonCodexClient {
     tokensInput?: number;
     tokensOutput?: number;
     finishReason?: string;
+    statusCode?: number;
     latencyMs?: number;
     toolsUsed?: (ToolRecord | AgentRecord)[];
     conversationId?: string;
@@ -181,6 +182,7 @@ export class AtheonCodexClient {
       tokensInput: opts.tokensInput,
       tokensOutput: opts.tokensOutput,
       finishReason: opts.finishReason,
+      statusCode: opts.statusCode,
       latencyMs: opts.latencyMs,
       toolsUsed: opts.toolsUsed ?? [],
       conversationId: opts.conversationId,

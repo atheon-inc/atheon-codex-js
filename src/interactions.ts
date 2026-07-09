@@ -151,6 +151,7 @@ export class Interaction extends BaseInteraction {
       tokensInput?: number;
       tokensOutput?: number;
       finishReason?: string;
+      statusCode?: number;
     } = {},
   ): Promise<[string, string, string | undefined]> {
     const promptHash = await generateHash(this.input);
@@ -175,6 +176,7 @@ export class Interaction extends BaseInteraction {
       tokensInput: opts.tokensInput,
       tokensOutput: opts.tokensOutput,
       finishReason: opts.finishReason,
+      statusCode: opts.statusCode,
       latencyMs,
       toolsUsed: this.toolsUsed,
       conversationId: this.conversationId,
@@ -204,6 +206,7 @@ export class ChildInteraction extends BaseInteraction {
   private tokensInput?: number;
   private tokensOutput?: number;
   private finishReason?: string;
+  private statusCode?: number;
 
   constructor(opts: {
     agentName: string;
@@ -225,6 +228,7 @@ export class ChildInteraction extends BaseInteraction {
     tokensInput?: number;
     tokensOutput?: number;
     finishReason?: string;
+    statusCode?: number;
   }): void {
     if (opts.tokensInput !== undefined) this.tokensInput = opts.tokensInput;
     if (opts.tokensOutput !== undefined) this.tokensOutput = opts.tokensOutput;
@@ -260,6 +264,7 @@ export class ChildInteraction extends BaseInteraction {
       tokensInput: this.tokensInput,
       tokensOutput: this.tokensOutput,
       finishReason: this.finishReason,
+      statusCode: this.statusCode,
       latencyMs,
       toolsUsed: this.toolsUsed,
       error,

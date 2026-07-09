@@ -61,6 +61,7 @@ export function buildAgentRecord(opts: {
   tokensInput?: number;
   tokensOutput?: number;
   finishReason?: string;
+  statusCode?: number;
   latencyMs: number;
   toolsUsed: (ToolRecord | AgentRecord)[];
   error?: string;
@@ -93,6 +94,7 @@ export function buildTrackPayload(opts: {
   tokensInput?: number;
   tokensOutput?: number;
   finishReason?: string;
+  statusCode?: number;
   latencyMs?: number;
   toolsUsed: (ToolRecord | AgentRecord)[];
   conversationId?: string;
@@ -109,6 +111,7 @@ export function buildTrackPayload(opts: {
     tokens_input: opts.tokensInput,
     tokens_output: opts.tokensOutput,
     finish_reason: opts.finishReason,
+    status_code: opts.statusCode,
     latency_ms:
       opts.latencyMs !== undefined ? opts.latencyMs.toFixed(2) : undefined,
     tools_used: opts.toolsUsed,
